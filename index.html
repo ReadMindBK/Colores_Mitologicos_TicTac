@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Cronómetro</title>
+
+    <link rel="stylesheet" href="css/style.css">
+
+</head>
+
+<body>
+
+    <div class="card">
+
+        <!-- Imagen de fondo -->
+        <img
+            class="cover"
+            src="img/portada.jpg"
+            alt="Portada">
+
+        <!-- Cronómetro sobre la imagen -->
+        <div class="ring">
+
+            <svg viewBox="0 0 120 120">
+
+                <!-- Aro de fondo -->
+                <circle
+                    class="bg"
+                    cx="60"
+                    cy="60"
+                    r="46">
+                </circle>
+
+                <!-- Aro de progreso -->
+                <circle
+                    id="prog"
+                    class="fg"
+                    cx="60"
+                    cy="60"
+                    r="46">
+                </circle>
+
+            </svg>
+
+            <div id="time">2:00</div>
+
+        </div>
+
+    </div>
+
+    <!-- Botones debajo de la imagen -->
+    <div class="btns">
+
+        <button id="b1" onclick="start()">
+            ▶ Iniciar
+        </button>
+
+        <button id="b2" onclick="pauseT()">
+            ⏸ Pausa
+        </button>
+
+        <button id="b3" onclick="resetT()">
+            ↺ Reinicio
+        </button>
+
+    </div>
+
+    <script src="js/script.js"></script>
+
+</body>
+
+</html>
