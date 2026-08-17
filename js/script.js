@@ -2,7 +2,7 @@
 // TIEMPO
 // =====================
 
-let T = 120;
+let T = 60;
 let t = T;
 let x = null;
 
