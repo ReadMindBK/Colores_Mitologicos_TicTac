@@ -1,78 +1,347 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-
     <meta charset="UTF-8">
-
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0">
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cronómetro</title>
+    <style>
+    body{
+    margin:0;
+    background:#ffffff;
+    font-family:Arial,Helvetica,sans-serif;
+    }
 
-    <link rel="stylesheet" href="css/style.css">
+        /* ========================= */
+        /* TARJETA */
+        /* ========================= */
+        .card{
+            position:relative;
+            width:calc(100% - 32px);
+            max-width:420px;
+            margin:20px auto;
+            border-radius:20px;
+            overflow:hidden;
+        }
 
+        .cover{
+            display:block;
+            width:100%;
+            border-radius:20px;
+        }
+
+        /* ========================= */
+        /* CRONÓMETRO */
+        /* ========================= */
+        .ring{
+            position:absolute;
+            top:72%;
+            left:50%;
+            transform:translate(-50%,-50%);
+            width:220px;
+            height:220px;
+            z-index:10;
+        }
+
+        .ring svg{
+            width:220px;
+            height:220px;
+            transform:rotate(-90deg);
+        }
+
+        .bg{
+            fill:none;
+            stroke:#d8d8d8;
+            stroke-width:12;
+        }
+
+        .fg{
+            fill:none;
+            stroke:#00d26a;
+            stroke-width:16;
+            stroke-linecap:round;
+            stroke-dasharray:289;
+            stroke-dashoffset:0;
+            transition:
+                stroke .35s,
+                stroke-dashoffset 1s linear,
+                filter .35s;
+            filter:drop-shadow(0 0 3px rgba(0,210,106,.35));
+        }
+
+        /* ========================= */
+        /* TIEMPO */
+        /* ========================= */
+        #time{
+            position:absolute;
+            inset:0;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:58px;
+            font-weight:700;
+            letter-spacing:-2px;
+            color:#222;
+            text-shadow:
+                0 1px 2px rgba(255,255,255,.9),
+                0 2px 4px rgba(0,0,0,.18);
+        }
+
+        /* ========================= */
+        /* BOTONES */
+        /* ========================= */
+        .btns{
+            width:calc(100% - 32px);
+            max-width:420px;
+            margin:15px auto;
+            display:grid;
+            gap:10px;
+        }
+
+        button{
+            background:#3b7ddd;
+            color:#fff;
+            border:none;
+            border-radius:12px;
+            padding:14px;
+            font-size:18px;
+            font-weight:bold;
+            cursor:pointer;
+            transition:
+                transform .2s,
+                box-shadow .2s,
+                background .3s;
+        }
+
+        button:hover{
+            transform:translateY(-2px) scale(1.03);
+            box-shadow:0 6px 12px rgba(0,0,0,.18);
+        }
+
+        button:active{
+            transform:scale(.98);
+        }
+
+        button.active{
+            background:#ff9800;
+        }
+
+        /* ========================= */
+        /* LATIDO */
+        /* ========================= */
+        .ring.running{
+            animation:pulse 1.6s ease-in-out infinite;
+        }
+
+        @keyframes pulse{
+            0%{
+                transform:translate(-50%,-50%) scale(1);
+            }
+            50%{
+                transform:translate(-50%,-50%) scale(1.012);
+            }
+            100%{
+                transform:translate(-50%,-50%) scale(1);
+            }
+        }
+
+        /* ========================= */
+        /* ESTILOS BOTÓN SITIO WEB */
+        /* ========================= */
+        .contenedor-enlace-web {
+          text-align: center;
+          margin-top: 150px; /* Ajustado para que encaje bien debajo de los botones del cronómetro */
+          margin-bottom: 20px;
+          width: 100%;
+        }
+
+        .enlace-imagen {
+          display: inline-block;
+          text-decoration: none;
+        }
+
+        .imagen-boton {
+          max-width: 260px;
+          width: 100%;
+          height: auto;
+          display: block;
+          margin: 0 auto;
+          transition: transform 0.2s ease;
+        }
+
+        .imagen-boton:hover {
+          transform: scale(1.05);
+          cursor: pointer;
+        }
+    </style>
 </head>
-
 <body>
 
     <div class="card">
-
         <!-- Imagen de fondo -->
-        <img
-            class="cover"
-            src="img/portada.jpg"
-            alt="Portada">
+        <img class="cover" src="portada.png" alt="Portada">
 
         <!-- Cronómetro sobre la imagen -->
         <div class="ring">
-
             <svg viewBox="0 0 120 120">
-
                 <!-- Aro de fondo -->
-                <circle
-                    class="bg"
-                    cx="60"
-                    cy="60"
-                    r="46">
-                </circle>
-
+                <circle class="bg" cx="60" cy="60" r="46"></circle>
                 <!-- Aro de progreso -->
-                <circle
-                    id="prog"
-                    class="fg"
-                    cx="60"
-                    cy="60"
-                    r="46">
-                </circle>
-
+                <circle id="prog" class="fg" cx="60" cy="60" r="46"></circle>
             </svg>
-
             <div id="time">2:00</div>
-
         </div>
-
     </div>
 
     <!-- Botones debajo de la imagen -->
     <div class="btns">
-
-        <button id="b1" onclick="start()">
-            ▶ Iniciar
-        </button>
-
-        <button id="b2" onclick="pauseT()">
-            ⏸ Pausa
-        </button>
-
-        <button id="b3" onclick="resetT()">
-            ↺ Reinicio
-        </button>
-
+        <button id="b1" onclick="start()">▶ Iniciar</button>
+        <button id="b2" onclick="pauseT()">⏸ Pausa</button>
+        <button id="b3" onclick="resetT()">↺ Reinicio</button>
     </div>
 
-    <script src="js/script.js"></script>
+    <!-- BOTÓN EN FORMA DE IMAGEN (NUEVO) -->
+    <div class="contenedor-enlace-web">
+      <a href="https://readmindbk.github.io/WEB/" class="enlace-imagen" target="_blank">
+        <img class="imagen-boton" src="web.png" alt="Sitio Web">
+      </a>
+    </div>
 
+    <script>
+        // =====================
+        // TIEMPO
+        // =====================
+
+        let T = 60;
+        let t = T;
+        let x = null;
+
+        // Elementos
+        const o = document.getElementById("time");
+        const c = document.getElementById("prog");
+        const ring = document.querySelector(".ring");
+
+        // Circunferencia automática
+        const C = 2 * Math.PI * parseFloat(c.getAttribute("r"));
+
+        c.style.strokeDasharray = C;
+        c.style.strokeDashoffset = 0;
+
+        // =====================
+        // AUDIOS
+        // =====================
+
+        const bgMusic = new Audio("musica.mp3");
+        bgMusic.loop = true;
+        bgMusic.volume = 0.2;
+
+        const alarm = new Audio("alarma.mp3");
+        alarm.volume = 1;
+
+        // =====================
+        // ACTUALIZAR PANTALLA
+        // =====================
+
+        function upd() {
+            o.textContent = Math.floor(t / 60) + ":" + String(t % 60).padStart(2, "0");
+            const f = t / T;
+            c.style.strokeDashoffset = C * (1 - f);
+
+            if (f > 0.5) {
+                c.style.stroke = "#00d26a";
+                c.style.filter = "drop-shadow(0 0 4px rgba(0,210,106,.45))";
+            } else if (f > 0.25) {
+                c.style.stroke = "#ffd000";
+                c.style.filter = "drop-shadow(0 0 5px rgba(255,208,0,.45))";
+            } else {
+                c.style.stroke = "#ff3030";
+                c.style.filter = "drop-shadow(0 0 6px rgba(255,60,60,.5))";
+            }
+        }
+
+        // =====================
+        // BOTONES
+        // =====================
+
+        function act(i) {
+            // Se actualizó para asegurar compatibilidad en todos los navegadores
+            [document.getElementById('b1'), document.getElementById('b2'), document.getElementById('b3')].forEach((e, n) => {
+                e.classList.toggle("active", n === i);
+            });
+        }
+
+        upd();
+
+        // =====================
+        // INICIAR
+        // =====================
+
+        function start() {
+            act(0);
+            if (x) return;
+            ring.classList.add("running");
+            if (bgMusic.paused) {
+                bgMusic.play().catch(() => {});
+            }
+
+            x = setInterval(() => {
+                if (t > 0) {
+                    t--;
+                    upd();
+                } else {
+                    clearInterval(x);
+                    x = null;
+                    ring.classList.remove("running");
+                    act(-1);
+                    stopBg();
+                    beep();
+                }
+            }, 1000);
+        }
+
+        // =====================
+        // PAUSA
+        // =====================
+
+        function pauseT() {
+            act(1);
+            clearInterval(x);
+            x = null;
+            ring.classList.remove("running");
+            bgMusic.pause();
+        }
+
+        // =====================
+        // RESET
+        // =====================
+
+        function resetT() {
+            act(2);
+            clearInterval(x);
+            x = null;
+            ring.classList.remove("running");
+            t = T;
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+            upd();
+        }
+
+        // =====================
+        // DETENER MÚSICA
+        // =====================
+
+        function stopBg() {
+            bgMusic.pause();
+            bgMusic.currentTime = 0;
+        }
+
+        // =====================
+        // ALARMA
+        // =====================
+
+        function beep() {
+            alarm.currentTime = 0;
+            alarm.play().catch(() => {});
+        }
+    </script>
 </body>
-
 </html>
